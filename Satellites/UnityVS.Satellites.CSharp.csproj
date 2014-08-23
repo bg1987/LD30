@@ -48,6 +48,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Background.cs" />
+    <Compile Include="Assets\DragCamera.cs" />
     <Compile Include="Assets\Orbit.cs" />
     <Compile Include="Assets\SatConnection.cs" />
   </ItemGroup>
