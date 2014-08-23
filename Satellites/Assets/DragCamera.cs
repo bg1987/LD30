@@ -13,6 +13,8 @@ public class DragCamera : MonoBehaviour
     public bool scaleDragWithZoom = true;
 	bool lockCameraToSelection = false;
 
+	public PlayUISound uiSound;
+
 	public GameObject selectedObject;
 
     // Use this for initialization
@@ -38,6 +40,7 @@ public class DragCamera : MonoBehaviour
 			{
 				selectedObject = selection.collider.gameObject;
 				lockCameraToSelection = true;
+				uiSound.PlayRandomSwitchClip();
 			}
 			else
 			{
