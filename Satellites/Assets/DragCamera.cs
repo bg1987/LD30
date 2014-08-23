@@ -43,15 +43,11 @@ public class DragCamera : MonoBehaviour
 			{
 				selectedObject = null;
 				lockCameraToSelection = false;
+				lastMousePos = Input.mousePosition;
 			}
 		}
 		//Drag camera
-        else if (Input.GetMouseButtonDown(1))
-        {
-			lockCameraToSelection = false;
-            lastMousePos = Input.mousePosition;
-
-        } else if (Input.GetMouseButton(1))
+		else if (Input.GetMouseButton(0) && !lockCameraToSelection)
         {
             Vector3 distanceToMove = (lastMousePos - Input.mousePosition);
             if(scaleDragWithZoom)
@@ -64,10 +60,10 @@ public class DragCamera : MonoBehaviour
             lastMousePos = Input.mousePosition;
         }
 		//Zoom
-		else if (Input.GetMouseButtonDown(2))
+		else if (Input.GetMouseButtonDown(1))
         {
             lastMousePos = Input.mousePosition;
-        } else if (Input.GetMouseButton(2))
+        } else if (Input.GetMouseButton(1))
         {
             zoom += (lastMousePos - Input.mousePosition).y * zoomSensitivity;
             lastMousePos = Input.mousePosition;
@@ -90,12 +86,17 @@ public class DragCamera : MonoBehaviour
     }
 
 	void OnGUI () {
-		GUI.Window (1, new Rect (0, 0, 100, 100), drawSelectionWindow, "Selection");
+		GUI.Window (1, new Rect (0, 0, 160, 240), drawSelectionWindow, "Selection");
 	}
 
 		void drawSelectionWindow(int id)
 		{
-			if(selectedObject != null)
-				GUI.DrawTexture (new Rect (0, 0, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof (SpriteRenderer))).sprite.texture);
+			if (selectedObject != null) 
+			{
+				GUI.DrawTexture (new Rect (30, 30, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof(SpriteRenderer))).sprite.texture);
+				GUI.Label(new Rect (10, 140, 140, 20), "Object: " + selectedObject.name);
+				GUI.Label(new Rect (10, 160, 140, 20), "Speed: " + ((Orbit)selectedObject.gameObject.GetComponent (typeof(Orbit))).rotationSpeed);
+			}
+
 		}
 }
