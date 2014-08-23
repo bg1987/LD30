@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.Satellites.CSharp", "UnityVS.Satellites.CSharp.csproj", "{D602C9B5-8A06-4101-B5E1-F08AE0F2306D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D602C9B5-8A06-4101-B5E1-F08AE0F2306D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D602C9B5-8A06-4101-B5E1-F08AE0F2306D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D602C9B5-8A06-4101-B5E1-F08AE0F2306D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D602C9B5-8A06-4101-B5E1-F08AE0F2306D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
