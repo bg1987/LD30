@@ -81,9 +81,9 @@ public class DragCamera : MonoBehaviour
 
 		
 		if(lockCameraToSelection)
-			camera.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y, camera.transform.position.z);
+			camera.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y, -zoom / 10);
 		camera.orthographicSize = zoom;
-    }
+	}
 
 	void OnGUI () {
 		GUI.Window (1, new Rect (0, 0, 160, 240), drawSelectionWindow, "Selection");

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Background.cs" />
+     <Compile Include="Assets\BackgroundMusic.cs" />
      <Compile Include="Assets\CommSat.cs" />
      <Compile Include="Assets\DragCamera.cs" />
      <Compile Include="Assets\Orbit.cs" />
