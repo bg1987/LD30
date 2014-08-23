@@ -11,6 +11,7 @@ public class DragCamera : MonoBehaviour
     public float maxZoom = 25;
     public float minZoom = 2;
     public bool scaleDragWithZoom = true;
+	bool lockCameraToSelection = false;
 
 	public GameObject selectedObject;
 
@@ -26,19 +27,31 @@ public class DragCamera : MonoBehaviour
 
 		float zoom = camera.orthographicSize;
 
-        //Drag camera
-        if (Input.GetMouseButtonDown(0))
-        {
-            lastMousePos = Input.mousePosition;
+		//Selection
+		if (Input.GetMouseButtonDown (0)) {
 
 
-			
 			//Select object
 			RaycastHit2D selection = Physics2D.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-			Debug.Log (selection.collider.gameObject.name);
-			selectedObject = selection.collider.gameObject;
 
-        } else if (Input.GetMouseButton(0))
+			if(selection != null && selection.collider != null && selection.collider.gameObject != null)
+			{
+				selectedObject = selection.collider.gameObject;
+				lockCameraToSelection = true;
+			}
+			else
+			{
+				selectedObject = null;
+				lockCameraToSelection = false;
+			}
+		}
+		//Drag camera
+        else if (Input.GetMouseButtonDown(1))
+        {
+			lockCameraToSelection = false;
+            lastMousePos = Input.mousePosition;
+
+        } else if (Input.GetMouseButton(1))
         {
             Vector3 distanceToMove = (lastMousePos - Input.mousePosition);
             if(scaleDragWithZoom)
@@ -49,16 +62,18 @@ public class DragCamera : MonoBehaviour
 
 			camera.transform.position = camera.transform.position + distanceToMove;
             lastMousePos = Input.mousePosition;
-        } else if (Input.GetMouseButtonDown(1))
+        }
+		//Zoom
+		else if (Input.GetMouseButtonDown(2))
         {
             lastMousePos = Input.mousePosition;
-        } else if (Input.GetMouseButton(1))
+        } else if (Input.GetMouseButton(2))
         {
             zoom += (lastMousePos - Input.mousePosition).y * zoomSensitivity;
             lastMousePos = Input.mousePosition;
         }
 
-
+		//Set min/max zoom
         if (zoom < minZoom)
         {
             zoom = minZoom;
@@ -67,6 +82,10 @@ public class DragCamera : MonoBehaviour
             zoom = maxZoom;
         }
 
+
+		
+		if(lockCameraToSelection)
+			camera.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y, camera.transform.position.z);
 		camera.orthographicSize = zoom;
     }
 
@@ -76,6 +95,7 @@ public class DragCamera : MonoBehaviour
 
 		void drawSelectionWindow(int id)
 		{
-			GUI.DrawTexture (new Rect (0, 0, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof (SpriteRenderer))).sprite.texture);
+			if(selectedObject != null)
+				GUI.DrawTexture (new Rect (0, 0, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof (SpriteRenderer))).sprite.texture);
 		}
 }
