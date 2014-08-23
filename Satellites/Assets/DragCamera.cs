@@ -4,13 +4,15 @@ using System.Collections;
 public class DragCamera : MonoBehaviour
 {
 
-    public Camera cameraTransform;
-    public Vector3 lastMousePos;
+    public Camera camera;
+    private Vector3 lastMousePos;
     public float dragSensitivity = .004f;
     public float zoomSensitivity = .04f;
-    public float maxZoom = 15;
+    public float maxZoom = 25;
     public float minZoom = 2;
     public bool scaleDragWithZoom = true;
+
+	public GameObject selectedObject;
 
     // Use this for initialization
     void Start()
@@ -22,12 +24,20 @@ public class DragCamera : MonoBehaviour
     void Update()
     {
 
-        float zoom = cameraTransform.orthographicSize;
+		float zoom = camera.orthographicSize;
 
         //Drag camera
         if (Input.GetMouseButtonDown(0))
         {
             lastMousePos = Input.mousePosition;
+
+
+			
+			//Select object
+			RaycastHit2D selection = Physics2D.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+			Debug.Log (selection.collider.gameObject.name);
+			selectedObject = selection.collider.gameObject;
+
         } else if (Input.GetMouseButton(0))
         {
             Vector3 distanceToMove = (lastMousePos - Input.mousePosition);
@@ -37,7 +47,7 @@ public class DragCamera : MonoBehaviour
                 distanceToMove.Scale(new Vector3(dragSensitivity, dragSensitivity, dragSensitivity));
 
 
-            cameraTransform.transform.position = cameraTransform.transform.position + distanceToMove;
+			camera.transform.position = camera.transform.position + distanceToMove;
             lastMousePos = Input.mousePosition;
         } else if (Input.GetMouseButtonDown(1))
         {
@@ -57,7 +67,15 @@ public class DragCamera : MonoBehaviour
             zoom = maxZoom;
         }
 
-        cameraTransform.orthographicSize = zoom;
-
+		camera.orthographicSize = zoom;
     }
+
+	void OnGUI () {
+		GUI.Window (1, new Rect (0, 0, 100, 100), drawSelectionWindow, "Selection");
+	}
+
+		void drawSelectionWindow(int id)
+		{
+			GUI.DrawTexture (new Rect (0, 0, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof (SpriteRenderer))).sprite.texture);
+		}
 }
