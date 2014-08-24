@@ -118,20 +118,7 @@ public class DragCamera : MonoBehaviour
 		camera.orthographicSize = zoom;
 	}
 
-	void OnGUI () {
-		GUI.Window (1, new Rect (0, 0, 160, 240), drawSelectionWindow, "Selection");
-	}
-
-	void drawSelectionWindow(int id)
-	{
-		if (selectedObject != null) 
-		{
-			GUI.DrawTexture (new Rect (30, 30, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof(SpriteRenderer))).sprite.texture);
-			GUI.Label(new Rect (10, 140, 140, 20), "Object: " + selectedObject.name);
-			GUI.Label(new Rect (10, 160, 140, 20), "Speed: " + ((Orbit)selectedObject.gameObject.GetComponent (typeof(Orbit))).rotationSpeed);
-		}
-
-	}
+    //TODO: unselect when clicked outside
 
     void SetSelectedImage()
     {
@@ -149,23 +136,32 @@ public class DragCamera : MonoBehaviour
          */
         GameObject original = GameObject.Find("SatPanel");
 
-        //if its a satellite:
-        if (selectedObject.tag == "Satellite")
+
+        Debug.Log("Satellite selected");
+        //Show/Create the SatPanel thing
+        GameObject radSlide = original.transform.Find("Sliders Panel/RadiusSlider").gameObject;
+        GameObject speedSlide = original.transform.Find("Sliders Panel/SpeedSlider").gameObject;
+        UnityEngine.UI.Text NameText = original.transform.Find("Name Plate/NameText").gameObject.GetComponent<UnityEngine.UI.Text>();
+
+        NameText.text = selectedObject.name;
+
+
+
+        GameObject tmp = original.transform.Find("Name Plate/NameText").gameObject;
+        UnityEngine.UI.Text tmp2 = tmp.GetComponent<UnityEngine.UI.Text>();
+        tmp2.text = selectedObject.name;
+        radSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
+        speedSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
+
+        SetGUISlider(radSlide, selectedObject.GetComponent<Orbit>().radius);
+        SetGUISlider(speedSlide, selectedObject.GetComponent<Orbit>().rotationSpeed);
+
+
+        //if its not a satellite:
+        if (!(selectedObject.tag == "Satellite"))
         {
-            Debug.Log("Satellite selected");
-            //Show/Create the SatPanel thing
-            GameObject radSlide = original.transform.Find("Image/RadiusSlider").gameObject;
-            GameObject speedSlide = original.transform.Find("Image/SpeedSlider").gameObject;
-
-
-            ChangeSelectedObject tmp = radSlide.GetComponent<ChangeSelectedObject>();
-
-            radSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
-            speedSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
-
-            SetGUISlider(radSlide, selectedObject.GetComponent<Orbit>().radius);
-            SetGUISlider(speedSlide, selectedObject.GetComponent<Orbit>().rotationSpeed);
-
+            //Disable sliders
+            //add a launch satellite button.
         }
         
     }
