@@ -22,9 +22,11 @@ public class RendererManager : MonoBehaviour {
 		for(int i = 0; i < LodCount + 1; i++)
 		{
 			float angle = i * (Mathf.PI * 2) / LodCount;
+			if(transform.parent){
 			lines.SetPosition(i, new Vector3(Mathf.Cos(angle) * orbitPreview.radius + transform.parent.transform.position.x, 
 			                                 Mathf.Sin(angle) * orbitPreview.radius + transform.parent.transform.position.y, 
 			                                 0));
+			}
 		}
 	}
 }

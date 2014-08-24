@@ -19,6 +19,8 @@ public class DragCamera : MonoBehaviour
 
 	public GameObject selectedObject;
 
+    GameObject launchButton = null;
+
     // Use this for initialization
     void Start()
     {
@@ -119,7 +121,7 @@ public class DragCamera : MonoBehaviour
 	}
 
     //TODO: unselect when clicked outside
-
+    
     void SetSelectedImage()
     {
         GameObject img = GameObject.Find("SelectionImage");
@@ -150,18 +152,39 @@ public class DragCamera : MonoBehaviour
         GameObject tmp = original.transform.Find("Name Plate/NameText").gameObject;
         UnityEngine.UI.Text tmp2 = tmp.GetComponent<UnityEngine.UI.Text>();
         tmp2.text = selectedObject.name;
+
         radSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
         speedSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
 
         SetGUISlider(radSlide, selectedObject.GetComponent<Orbit>().radius);
         SetGUISlider(speedSlide, selectedObject.GetComponent<Orbit>().rotationSpeed);
 
-
+        
+        if (launchButton != null)
+        {
+            Debug.Log(launchButton.transform.position);
+        }
         //if its not a satellite:
         if (!(selectedObject.tag == "Satellite"))
         {
             //Disable sliders
             //add a launch satellite button.
+            if (launchButton == null)
+            {
+
+                //launchButton = Instantiate(Resources.Load("SatLaunch")) as GameObject;
+                //launchButton.transform.parent = original.transform;
+                //launchButton.transform.position = new Vector3(270,22);
+            }
+
+        }
+        else
+        {
+            if (launchButton != null)
+            {
+                Destroy(launchButton);    
+            }
+            
         }
         
     }
