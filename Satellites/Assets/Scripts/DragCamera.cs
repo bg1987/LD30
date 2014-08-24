@@ -15,6 +15,7 @@ public class DragCamera : MonoBehaviour
 	Vector3 lockedOffset = new Vector3();
 	public int scrollSensitivity = 100;
 
+
 	public Background bkg;
 
 	public PlayUISound uiSound;

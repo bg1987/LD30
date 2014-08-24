@@ -16,6 +16,10 @@ public class GameRules : MonoBehaviour {
 
 	public bool hasWon = false;
 
+	public int totalAllowedFuel = 500;
+
+	public float currentFuel = 0;
+
 	public enum RuleType
 	{
 		percentageOverTime,
@@ -35,6 +39,17 @@ public class GameRules : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+
+		GameObject[] sats = GameObject.FindGameObjectsWithTag ("Satellite");
+		
+		currentFuel = 0;
+		
+		foreach (GameObject sat in sats) {
+			currentFuel += ((FuelCost) sat.GetComponent("FuelCost")).GetFuelCost();
+		}
+
+
 		if(isStarted)
 			switch (rule) {
 			case RuleType.continuousTime:
@@ -89,9 +104,14 @@ public class GameRules : MonoBehaviour {
 	public void StartRules()
 	{
 		End ();
-		isStarted = true;
-		startTime = Time.time;
-		counter = 0;
+
+		if (currentFuel <= totalAllowedFuel) {
+
+			isStarted = true;
+			startTime = Time.time;
+			counter = 0;
+
+		}
 	}
 
 	public void End()
