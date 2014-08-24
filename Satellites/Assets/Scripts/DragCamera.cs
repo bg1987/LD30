@@ -102,6 +102,8 @@ public class DragCamera : MonoBehaviour
 
 		//Zoom
 		zoom -= Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity;
+		zoom += Input.GetKeyDown (KeyCode.Equals) ? scrollSensitivity / 4 : 0;
+		zoom -= Input.GetKeyDown (KeyCode.Minus) ? scrollSensitivity / 4 : 0;
 
 		//Set min/max zoom
         if (zoom < minZoom)
