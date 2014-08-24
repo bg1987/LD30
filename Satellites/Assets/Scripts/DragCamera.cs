@@ -190,6 +190,7 @@ public class DragCamera : MonoBehaviour
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Launch Satellite";
                 setGuiSldierEdgeValues(radSlide, 10, 500,false);
                 setGuiSldierEdgeValues(speedSlide, 1, 50, false);
+                SetAdditionalInfo(orbit);
             }
             else if (selectedObject.tag == "Satellite")
             {
@@ -197,20 +198,36 @@ public class DragCamera : MonoBehaviour
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Destroy Satellite";
 
                 setGuiSldierEdgeValues(radSlide, 5, 20,true);
-                setGuiSldierEdgeValues(speedSlide, 10, 500, true);               
+                setGuiSldierEdgeValues(speedSlide, 10, 500, true);
+                ClearAdditionalInfo();
             }
             SetGUISlider(radSlide, orbit.radius);
             SetGUISlider(speedSlide, orbit.rotationSpeed);
 
         }
+
         else
         {
             satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "";
             SetGUISlider(speedSlide,0);
             SetGUISlider(radSlide,0);
+            ClearAdditionalInfo();
         }
     }
 
+    private void SetAdditionalInfo(Orbit orbit)
+    {
+        GameObject topPanel = GameObject.Find("ExtraInfoText");
+        UnityEngine.UI.Text label = topPanel.GetComponent<UnityEngine.UI.Text>();
+        label.text = string.Format("Base$:{0} CostPerRadius:{1} BaseRadius:{2}",orbit.baseCost,orbit.additionalRadiusCost,orbit.baseRadius);
+    }
+
+    private void ClearAdditionalInfo() 
+    {
+        GameObject topPanel = GameObject.Find("ExtraInfoText");
+        UnityEngine.UI.Text label = topPanel.GetComponent<UnityEngine.UI.Text>();
+        label.text = "";
+    }
 
 
     void SetGUISlider(GameObject sliderObj, float value)
