@@ -17,8 +17,10 @@ public class Orbit : MonoBehaviour
 
     void Update()
     {
-        transform.RotateAround(center.position, axis, rotationSpeed * Time.deltaTime);
-        desiredPosition = (transform.position - center.position).normalized * radius + center.position;
-        transform.position = Vector3.MoveTowards(transform.position, desiredPosition, Time.deltaTime * radiusSpeed);
+		if (center != null) {
+			transform.RotateAround (center.position, axis, rotationSpeed * Time.deltaTime);
+			desiredPosition = (transform.position - center.position).normalized * radius + center.position;
+			transform.position = Vector3.MoveTowards (transform.position, desiredPosition, Time.deltaTime * radiusSpeed);
+		}
     }
 }
