@@ -168,8 +168,6 @@ public class DragCamera : MonoBehaviour
         
         GameObject original = GameObject.Find("SatPanel");
 
-
-        Debug.Log("Satellite selected");
         //Show/Create the SatPanel thing
         GameObject radSlide = original.transform.Find("Sliders Panel/RadiusSlider").gameObject;
         GameObject speedSlide = original.transform.Find("Sliders Panel/SpeedSlider").gameObject;
@@ -182,6 +180,18 @@ public class DragCamera : MonoBehaviour
 
         if (orbit)
         {
+
+            //logic for planets vs satellites
+            if (selectedObject.tag == "Planet")
+            {
+                setGuiSldierEdgeValues(radSlide, 10, 500,false);
+                setGuiSldierEdgeValues(speedSlide, 1, 50, false);
+            }
+            else if (selectedObject.tag == "Satellite")
+            {
+                setGuiSldierEdgeValues(radSlide, 5, 20,true);
+                setGuiSldierEdgeValues(speedSlide, 10, 500, true);               
+            }
             SetGUISlider(radSlide, orbit.radius);
             SetGUISlider(speedSlide, orbit.rotationSpeed);
 
@@ -198,6 +208,17 @@ public class DragCamera : MonoBehaviour
     void SetGUISlider(GameObject sliderObj, float value)
     {
         UnityEngine.UI.Slider slider = sliderObj.GetComponent<UnityEngine.UI.Slider>();
+        Debug.Log(string.Format("Setting slider to val {0}, edge values are {1},{2}", value, slider.minValue, slider.maxValue));
         slider.value = value;
+
+        //different scales for planets vs satellites
+    }
+
+    void setGuiSldierEdgeValues(GameObject sliderObj, float min, float max, bool interactable)
+    {
+        UnityEngine.UI.Slider slider = sliderObj.GetComponent<UnityEngine.UI.Slider>();
+        slider.maxValue = max;
+        slider.minValue = min;
+        slider.interactable = interactable;
     }
 }
