@@ -10,23 +10,26 @@ public class RendererManager : MonoBehaviour {
 
 	// Use this for initialization
 	public void Start () {
-		lines.sortingLayerName = "Orbit";
-		trails.sortingLayerName = "Trail";
-
-		lines.SetVertexCount (LodCount + 1);
+		if (lines != null) 
+		{
+			lines.sortingLayerName = "Orbit";			
+			lines.SetVertexCount (LodCount + 1);
+		}
+		if (trails != null) 
+		{
+			trails.sortingLayerName = "Trail";
+		}
 	}
 	
 	// Update is called once per frame
 	public void Update () {
-
-		for(int i = 0; i < LodCount + 1; i++)
-		{
-			float angle = i * (Mathf.PI * 2) / LodCount;
-			if(transform.parent){
-			lines.SetPosition(i, new Vector3(Mathf.Cos(angle) * orbitPreview.radius + transform.parent.transform.position.x, 
-			                                 Mathf.Sin(angle) * orbitPreview.radius + transform.parent.transform.position.y, 
-			                                 0));
+		if(lines != null && orbitPreview != null)
+			for(int i = 0; i < LodCount + 1; i++)
+			{
+				float angle = i * (Mathf.PI * 2) / LodCount;
+				lines.SetPosition(i, new Vector3(Mathf.Cos(angle) * orbitPreview.radius + transform.parent.transform.position.x, 
+				                                 Mathf.Sin(angle) * orbitPreview.radius + transform.parent.transform.position.y, 
+				                                 0));
 			}
-		}
 	}
 }

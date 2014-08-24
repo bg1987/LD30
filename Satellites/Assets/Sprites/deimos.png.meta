@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 549e404c7ae51024c9be3107ebea3ae7
+guid: 4e33476b91e24f844b0ba96ca9cdf66b
 TextureImporter:
   fileIDToRecycleName:
-    21300000: starsbright
+    21300000: deimos
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -25,7 +25,7 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 1024
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: -1
     mipBias: -1
     wrapMode: -1

@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 549e404c7ae51024c9be3107ebea3ae7
+guid: db3f47c36eb89fd46bbb2506d7df7548
 TextureImporter:
   fileIDToRecycleName:
-    21300000: starsbright
+    21300000: phobos
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -25,7 +25,7 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 1024
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: -1
     mipBias: -1
     wrapMode: -1
