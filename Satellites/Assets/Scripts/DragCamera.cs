@@ -15,9 +15,9 @@ public class DragCamera : MonoBehaviour
 	Vector3 lockedOffset = new Vector3();
 	public int scrollSensitivity = 100;
 
-	public PlayUISound uiSound;
+	public Background bkg;
 
-	public GameObject selectedObject;
+	public PlayUISound uiSound;
 
     GameObject launchButton = null;
 
@@ -50,7 +50,6 @@ public class DragCamera : MonoBehaviour
 
 			    if(selection != null && selection.collider != null && selection.collider.gameObject != null)
 			    {
-				    selectedObject = selection.collider.gameObject;
 				    lockCameraToSelection = true;
 				    uiSound.PlayRandomSwitchClip();
                     GlobalObjects.Instance.SelectedObject = selection.collider.gameObject;
@@ -60,7 +59,6 @@ public class DragCamera : MonoBehaviour
 			    else
 			    {
                     ClearSelectedImage();
-				    selectedObject = null;
 				    lockCameraToSelection = false;
 				    lastMousePos = Input.mousePosition;
 			    }
@@ -116,9 +114,60 @@ public class DragCamera : MonoBehaviour
 
 		
 		if(lockCameraToSelection)
-			camera.transform.position = new Vector3(selectedObject.transform.position.x + lockedOffset.x, selectedObject.transform.position.y + lockedOffset.y, camera.transform.position.z);
+			camera.transform.position = new Vector3(GlobalObjects.Instance.SelectedObject.transform.position.x + lockedOffset.x, 
+			                                        GlobalObjects.Instance.SelectedObject.transform.position.y + lockedOffset.y, 
+			                                        camera.transform.position.z);
 
 		camera.orthographicSize = zoom;
+
+		int xLimit = (int) (512 * 0.70710678118f);
+		int yLimit = (int) (512 * 0.70710678118f);
+
+		if (camera.transform.position.x > xLimit) {
+			camera.transform.position = new Vector3(xLimit, camera.transform.position.y, camera.transform.position.z);
+		}
+		else if (camera.transform.position.x < -xLimit) {
+			camera.transform.position = new Vector3(-xLimit, camera.transform.position.y, camera.transform.position.z);
+		}
+
+		if (camera.transform.position.y > yLimit) {
+			camera.transform.position = new Vector3 (camera.transform.position.x, yLimit, camera.transform.position.z);
+		}
+		else if (camera.transform.position.y < -yLimit) {
+			camera.transform.position = new Vector3(camera.transform.position.x, -yLimit, camera.transform.position.z);
+		}
+
+
+
+		if (Input.GetKeyDown (KeyCode.Tab)) {
+
+			Transform parentTrans = GlobalObjects.Instance.SelectedObject.transform.parent;
+
+			int thisPosInParentList = 0;
+			for(int i = 0; i < parentTrans.childCount; i++)
+			{
+				if(parentTrans.GetChild(i) == GlobalObjects.Instance.SelectedObject.transform)
+				{
+					thisPosInParentList = i;
+					break;
+				}
+			}
+
+			thisPosInParentList += 1;
+
+			if(thisPosInParentList >= parentTrans.childCount)
+			{
+				thisPosInParentList = 0;
+			}
+
+			lockCameraToSelection = true;
+			lockedOffset = new Vector3();
+			GlobalObjects.Instance.SelectedObject = parentTrans.GetChild(thisPosInParentList).gameObject;
+			SetSelectedImage();
+
+		}
+
+
 	}
 
     //TODO: unselect when clicked outside
@@ -131,14 +180,16 @@ public class DragCamera : MonoBehaviour
     void SetSelectedImage()
     {
 
-        SetSatPanel(selectedObject.GetComponent<SpriteRenderer>().sprite, selectedObject.name, selectedObject.GetComponent<Orbit>());
+		SetSatPanel(GlobalObjects.Instance.SelectedObject.GetComponent<SpriteRenderer>().sprite, 
+		            GlobalObjects.Instance.SelectedObject.name, 
+		            GlobalObjects.Instance.SelectedObject.GetComponent<Orbit>());
 
         if (launchButton != null)
         {
             Debug.Log(launchButton.transform.position);
         }
         //if its not a satellite:
-        if (!(selectedObject.tag == "Satellite"))
+		if (!(GlobalObjects.Instance.SelectedObject.tag == "Satellite"))
         {
             //Disable sliders
 
@@ -185,14 +236,14 @@ public class DragCamera : MonoBehaviour
         {
 
             //logic for planets vs satellites
-            if (selectedObject.tag == "Planet")
+			if (GlobalObjects.Instance.SelectedObject.tag == "Planet")
             {
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Launch Satellite";
                 setGuiSldierEdgeValues(radSlide, 10, 500,false);
                 setGuiSldierEdgeValues(speedSlide, 1, 50, false);
                 SetAdditionalInfo(orbit);
             }
-            else if (selectedObject.tag == "Satellite")
+			else if (GlobalObjects.Instance.SelectedObject.tag == "Satellite")
             {
                 
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Destroy Satellite";

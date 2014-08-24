@@ -9,7 +9,7 @@ public class LaunchSatellite : MonoBehaviour {
     public void Launch()
     {
 
-        GameObject selected = cam.GetComponent<DragCamera>().selectedObject;
+		GameObject selected = GlobalObjects.Instance.SelectedObject;
 
         if (!selected)//cant launch sats around null or around other sats.
         {
