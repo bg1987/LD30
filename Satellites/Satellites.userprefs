@@ -1,10 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SatConnection.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\DragCamera.cs">
     <Files>
-      <File FileName="Assets\Scripts\SatConnection.cs" Line="73" Column="39" />
-      <File FileName="Assets\Scripts\RendererManager.cs" Line="30" Column="1" />
-      <File FileName="Assets\Scripts\DragCamera.cs" Line="51" Column="1" />
+      <File FileName="Assets\Scripts\SatConnection.cs" Line="87" Column="1" />
+      <File FileName="Assets\Scripts\RendererManager.cs" Line="29" Column="49" />
+      <File FileName="Assets\Scripts\DragCamera.cs" Line="165" Column="72" />
+      <File FileName="Assets\Scripts\GameRules.cs" Line="64" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
