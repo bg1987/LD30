@@ -178,17 +178,24 @@ public class DragCamera : MonoBehaviour
         radSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = orbit;
         speedSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = orbit;
 
+        GameObject satLaunchText = original.transform.Find("SatLaunch/Text").gameObject;
+        
+
         if (orbit)
         {
 
             //logic for planets vs satellites
             if (selectedObject.tag == "Planet")
             {
+                satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Launch Satellite";
                 setGuiSldierEdgeValues(radSlide, 10, 500,false);
                 setGuiSldierEdgeValues(speedSlide, 1, 50, false);
             }
             else if (selectedObject.tag == "Satellite")
             {
+                
+                satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Destroy Satellite";
+
                 setGuiSldierEdgeValues(radSlide, 5, 20,true);
                 setGuiSldierEdgeValues(speedSlide, 10, 500, true);               
             }
@@ -198,6 +205,7 @@ public class DragCamera : MonoBehaviour
         }
         else
         {
+            satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "";
             SetGUISlider(speedSlide,0);
             SetGUISlider(radSlide,0);
         }

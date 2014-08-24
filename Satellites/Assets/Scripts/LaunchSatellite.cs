@@ -11,9 +11,13 @@ public class LaunchSatellite : MonoBehaviour {
 
         GameObject selected = cam.GetComponent<DragCamera>().selectedObject;
 
-        if (!selected || selected.tag == "Satellite")//cant launch sats around null or around other sats.
+        if (!selected)//cant launch sats around null or around other sats.
         {
             return;
+        }
+        if (selected.tag == "Satellite")
+        {
+            Destroy(selected);
         }
         Debug.Log(selected.tag);
         //TODO: Name Sats.
