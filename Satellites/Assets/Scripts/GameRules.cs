@@ -32,6 +32,10 @@ public class GameRules : MonoBehaviour {
 
 	public float currPercentage;
 
+    public UnityEngine.UI.Text fuelLabel;
+    public UnityEngine.UI.Text uplinkLabel;
+
+
 	// Use this for initialization
 	void Start () {
 	
@@ -54,6 +58,7 @@ public class GameRules : MonoBehaviour {
 			switch (rule) {
 			case RuleType.continuousTime:
 
+                //StartTime is logged, if timeRequired has passed and there was no link disruption, winner.
 				if(sat1.connectedSats.Contains(sat2.myID))
 				{
 					counter = Time.time;
@@ -69,18 +74,18 @@ public class GameRules : MonoBehaviour {
 					hasWon = true;
 					Debug.Log("winner");
 				}
-
+                
 				break;
 
 			case RuleType.percentageOverTime:
 
-
+                
 				if(sat1.connectedSats.Contains(sat2.myID))
 				{
 					counter += Time.deltaTime;
 				}
-
-			currPercentage = counter / (Time.time - startTime);
+            
+			    currPercentage = counter / (Time.time - startTime);
 
 				if(Time.time >= startTime + timeRequired)
 				{
@@ -92,13 +97,24 @@ public class GameRules : MonoBehaviour {
 					}
 				}
 
-
+                uplinkLabel.text = "Uplink:\n" + currPercentage.ToString("F2") + "/" + percentageRequired;
 				break;
 			}
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			StartRules();
 		}
+
+
+        fuelLabel.text = "Fuel:\n" + currentFuel.ToString("F2") + "/" + totalAllowedFuel.ToString();
+        if (currentFuel > totalAllowedFuel)
+        {
+            fuelLabel.color = Color.red;
+        }
+        else
+        {
+            fuelLabel.color = Color.white;
+        }
 	}
 
 	public void StartRules()
