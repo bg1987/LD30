@@ -13,6 +13,7 @@ public class Orbit : MonoBehaviour
 	public float baseRadius = 5;
 	public float baseCost = 5;
 	public float additionalRadiusCost = 1;
+	public float minRadius = 3;
 
     void Start()
     {

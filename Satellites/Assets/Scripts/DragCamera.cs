@@ -237,10 +237,13 @@ public class DragCamera : MonoBehaviour
         {
 
             //logic for planets vs satellites
-			if (GlobalObjects.Instance.SelectedObject.tag == "Planet")
+			if (GlobalObjects.Instance.SelectedObject.tag == "Planet" || GlobalObjects.Instance.SelectedObject.tag == "StartingPlanet")
             {
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Launch Satellite";
-                setGuiSldierEdgeValues(radSlide, 10, 500,false);
+				setGuiSldierEdgeValues(radSlide, 
+				                       GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().minRadius, 
+				                       5 * GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().baseRadius,
+				                       false);
                 setGuiSldierEdgeValues(speedSlide, 1, 50, false);
                 SetAdditionalInfo(orbit);
             }
@@ -249,8 +252,11 @@ public class DragCamera : MonoBehaviour
                 
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Destroy Satellite";
 
-                setGuiSldierEdgeValues(radSlide, 5, 20,true);
-                setGuiSldierEdgeValues(speedSlide, 10, 500, true);
+				setGuiSldierEdgeValues(radSlide, 
+				                       GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().minRadius, 
+				                       2.5f * GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().baseRadius,
+				                       true);
+                setGuiSldierEdgeValues(speedSlide, 5, 200, true);
                 ClearAdditionalInfo();
             }
             SetGUISlider(radSlide, orbit.radius);

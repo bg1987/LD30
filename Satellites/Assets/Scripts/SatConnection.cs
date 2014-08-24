@@ -63,7 +63,8 @@ public class SatConnection : MonoBehaviour {
             }
 
             //if there is a direct line between the satelites
-            if (!Physics2D.Linecast(transform.position,sat.transform.position,LayerMask.GetMask("Planet")))
+            if (!Physics2D.Linecast(transform.position,sat.transform.position,LayerMask.GetMask("Planet"))
+			    && !Physics2D.Linecast(transform.position,sat.transform.position,LayerMask.GetMask("StartingPlanet")))
             {
                 //Debug.DrawLine(transform.position, sat.transform.position, Color.green);
 				if(currentLinerenderer >= lines.Count)

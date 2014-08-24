@@ -1,0 +1,3 @@
+Improve main menu
+Sounds on UI controls
+Show individual sat cost
