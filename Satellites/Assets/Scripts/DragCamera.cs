@@ -15,6 +15,8 @@ public class DragCamera : MonoBehaviour
 	Vector3 lockedOffset = new Vector3();
 	public int scrollSensitivity = 100;
 
+	public Background bkg;
+
 	public PlayUISound uiSound;
 
 	public GameObject selectedObject;
@@ -119,6 +121,23 @@ public class DragCamera : MonoBehaviour
 			camera.transform.position = new Vector3(selectedObject.transform.position.x + lockedOffset.x, selectedObject.transform.position.y + lockedOffset.y, camera.transform.position.z);
 
 		camera.orthographicSize = zoom;
+
+		int xLimit = (int) (512 * 0.70710678118f);
+		int yLimit = (int) (512 * 0.70710678118f);
+
+		if (camera.transform.position.x > xLimit) {
+			camera.transform.position = new Vector3(xLimit, camera.transform.position.y, camera.transform.position.z);
+		}
+		else if (camera.transform.position.x < -xLimit) {
+			camera.transform.position = new Vector3(-xLimit, camera.transform.position.y, camera.transform.position.z);
+		}
+
+		if (camera.transform.position.y > yLimit) {
+			camera.transform.position = new Vector3 (camera.transform.position.x, yLimit, camera.transform.position.z);
+		}
+		else if (camera.transform.position.y < -yLimit) {
+			camera.transform.position = new Vector3(camera.transform.position.x, -yLimit, camera.transform.position.z);
+		}
 	}
 
     //TODO: unselect when clicked outside
