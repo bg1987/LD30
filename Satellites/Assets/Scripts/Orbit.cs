@@ -10,6 +10,10 @@ public class Orbit : MonoBehaviour
     public float radiusSpeed = 0.5f;
     public float rotationSpeed = 80.0f;
 
+	public float baseRadius = 5;
+	public float baseCost = 5;
+	public float additionalRadiusCost = 1;
+
     void Start()
     {
         //transform.position = (transform.position - center.position).normalized * radius + center.position;
