@@ -23,7 +23,7 @@ public class RendererManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	public void Update () {
-		if(lines != null)
+		if(lines != null && orbitPreview != null)
 			for(int i = 0; i < LodCount + 1; i++)
 			{
 				float angle = i * (Mathf.PI * 2) / LodCount;
