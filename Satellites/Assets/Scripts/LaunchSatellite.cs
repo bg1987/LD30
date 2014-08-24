@@ -27,13 +27,15 @@ public class LaunchSatellite : MonoBehaviour {
         newSat.name = "Sat_" + satCon.myID;
 
         Orbit orbit = newSat.GetComponent<Orbit>();
-        orbit.radius = 5.0f;
+		orbit.radius = selected.GetComponent<Orbit> ().baseRadius;
         orbit.radiusSpeed = 30.0f;
-        orbit.rotationSpeed = 20f;
+        orbit.rotationSpeed = 10f;
 
         orbit.center = selected.transform;
 
         newSat.transform.parent = selected.transform;
+
+		newSat.transform.position = GameObject.FindGameObjectWithTag("StartingPlanet").transform.position + new Vector3 (0, 1, 0);
        
         
 
