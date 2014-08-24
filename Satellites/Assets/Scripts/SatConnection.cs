@@ -77,6 +77,7 @@ public class SatConnection : MonoBehaviour {
 					Color colors = Color.green;
 					newLine.SetColors(colors, colors);
 					newLine.SetVertexCount(2);
+					newLine.transform.parent = transform;
 					lines.Add(newLine);
 				}
 
@@ -87,7 +88,7 @@ public class SatConnection : MonoBehaviour {
 				lRend.enabled = true;
 				lRend.SetPosition(0, transform.position);
 				lRend.SetPosition(1, sat.transform.position);
-				lRend.transform.parent = transform.parent.transform;
+				lRend.transform.parent = transform;
 
                 preConnectedSats.Add(satCon.myID);
                 preConnectedSats.UnionWith(satCon.CheckConnection(preConnectedSats));
