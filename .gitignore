@@ -11,3 +11,7 @@
 /*.userprefs
 /*.pidb
 /*.booproj
+*.csproj
+*.sln
+Satellites/Satelites_Data/
+*.suo
