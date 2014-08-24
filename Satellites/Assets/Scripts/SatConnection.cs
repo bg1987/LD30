@@ -102,7 +102,7 @@ public class SatConnection : MonoBehaviour {
         {
             tmp += id + " ";
         }
-        Debug.Log(string.Format("Sat{0}, has talked to the following sats: {1}", myID, tmp));
+        //Debug.Log(string.Format("Sat{0}, has talked to the following sats: {1}", myID, tmp));
     }
 }
 

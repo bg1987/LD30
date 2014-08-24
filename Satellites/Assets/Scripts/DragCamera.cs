@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.EventSystems;
 public class DragCamera : MonoBehaviour
 {
 
@@ -29,62 +29,73 @@ public class DragCamera : MonoBehaviour
     void Update()
     {
 
+
+
+        
 		float zoom = camera.orthographicSize;
 
-		//Selection
-		if (Input.GetMouseButtonDown (0)) {
-
-			lockedOffset = new Vector3(0, 0, 0);
-
-			//Select object
-			RaycastHit2D selection = Physics2D.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-
-			if(selection != null && selection.collider != null && selection.collider.gameObject != null)
-			{
-				selectedObject = selection.collider.gameObject;
-				lockCameraToSelection = true;
-				uiSound.PlayRandomSwitchClip();
-			}
-			else
-			{
-				selectedObject = null;
-				lockCameraToSelection = false;
-				lastMousePos = Input.mousePosition;
-			}
-		}
-		//Drag camera
-		else if (Input.GetMouseButton(0) && !lockCameraToSelection)
+		//Do nothing here if the mouse is clicked over a UI element.
+        if (!((Input.GetMouseButton(0) || Input.GetMouseButton(1)) && EventSystemManager.currentSystem.IsPointerOverEventSystemObject()))
         {
+            //Selection
+		    if (Input.GetMouseButtonDown (0)) {
 
-			lockedOffset = new Vector3(0, 0, 0);
+			    lockedOffset = new Vector3(0, 0, 0);
 
-            Vector3 distanceToMove = (lastMousePos - Input.mousePosition);
-            if(scaleDragWithZoom)
-                distanceToMove.Scale(new Vector3(dragSensitivity * zoom, dragSensitivity * zoom, dragSensitivity * zoom));
-            else
-                distanceToMove.Scale(new Vector3(dragSensitivity, dragSensitivity, dragSensitivity));
+			    //Select object
+			    RaycastHit2D selection = Physics2D.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            
+
+			    if(selection != null && selection.collider != null && selection.collider.gameObject != null)
+			    {
+				    selectedObject = selection.collider.gameObject;
+				    lockCameraToSelection = true;
+				    uiSound.PlayRandomSwitchClip();
+                
+                    SetSelectedImage();
+                
+			    }
+			    else
+			    {
+				    selectedObject = null;
+				    lockCameraToSelection = false;
+				    lastMousePos = Input.mousePosition;
+			    }
+		    }
+		    //Drag camera
+		    else if (Input.GetMouseButton(0) && !lockCameraToSelection)
+            {
+
+			    lockedOffset = new Vector3(0, 0, 0);
+
+                Vector3 distanceToMove = (lastMousePos - Input.mousePosition);
+                if(scaleDragWithZoom)
+                    distanceToMove.Scale(new Vector3(dragSensitivity * zoom, dragSensitivity * zoom, dragSensitivity * zoom));
+                else
+                    distanceToMove.Scale(new Vector3(dragSensitivity, dragSensitivity, dragSensitivity));
 
 
-			camera.transform.position = camera.transform.position + distanceToMove;
-            lastMousePos = Input.mousePosition;
-        }
-		//Offset
-		else if(Input.GetMouseButtonDown(1))
-		{			
-			lastMousePos = Input.mousePosition;
-		}
-		else if (Input.GetMouseButton(1))
-        {
-			if(scaleDragWithZoom)
-			{
-				Vector3 tempPos = (lastMousePos - Input.mousePosition);
-				tempPos.Scale(new Vector3(dragSensitivity * zoom, dragSensitivity * zoom, dragSensitivity * zoom));
-				lockedOffset += tempPos;
-			}
-			else
-				lockedOffset += (lastMousePos - Input.mousePosition);
+			    camera.transform.position = camera.transform.position + distanceToMove;
+                lastMousePos = Input.mousePosition;
+            }
+		    //Offset
+		    else if(Input.GetMouseButtonDown(1))
+		    {			
+			    lastMousePos = Input.mousePosition;
+		    }
+		    else if (Input.GetMouseButton(1))
+            {
+			    if(scaleDragWithZoom)
+			    {
+				    Vector3 tempPos = (lastMousePos - Input.mousePosition);
+				    tempPos.Scale(new Vector3(dragSensitivity * zoom, dragSensitivity * zoom, dragSensitivity * zoom));
+				    lockedOffset += tempPos;
+			    }
+			    else
+				    lockedOffset += (lastMousePos - Input.mousePosition);
 
-			lastMousePos = Input.mousePosition;
+			    lastMousePos = Input.mousePosition;
+            }
         }
 
 		//Zoom
@@ -111,14 +122,57 @@ public class DragCamera : MonoBehaviour
 		GUI.Window (1, new Rect (0, 0, 160, 240), drawSelectionWindow, "Selection");
 	}
 
-		void drawSelectionWindow(int id)
+	void drawSelectionWindow(int id)
+	{
+		if (selectedObject != null) 
 		{
-			if (selectedObject != null) 
-			{
-				GUI.DrawTexture (new Rect (30, 30, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof(SpriteRenderer))).sprite.texture);
-				GUI.Label(new Rect (10, 140, 140, 20), "Object: " + selectedObject.name);
-				GUI.Label(new Rect (10, 160, 140, 20), "Speed: " + ((Orbit)selectedObject.gameObject.GetComponent (typeof(Orbit))).rotationSpeed);
-			}
-
+			GUI.DrawTexture (new Rect (30, 30, 100, 100), ((SpriteRenderer)selectedObject.gameObject.GetComponent (typeof(SpriteRenderer))).sprite.texture);
+			GUI.Label(new Rect (10, 140, 140, 20), "Object: " + selectedObject.name);
+			GUI.Label(new Rect (10, 160, 140, 20), "Speed: " + ((Orbit)selectedObject.gameObject.GetComponent (typeof(Orbit))).rotationSpeed);
 		}
+
+	}
+
+    void SetSelectedImage()
+    {
+        GameObject img = GameObject.Find("SelectionImage");
+        UnityEngine.UI.Image com = img.GetComponent<UnityEngine.UI.Image>();
+        com.sprite = selectedObject.GetComponent<SpriteRenderer>().sprite;
+        /*
+        GameObject b = GameObject.Find("SatPanel");
+        GameObject canvas = GameObject.Find("Canvas");
+        
+        GameObject panel = Instantiate(original, new Vector3(300, 100), Quaternion.identity) as GameObject;
+        panel.transform.parent = canvas.transform;
+        Debug.Log(b.transform.position);
+
+         */
+        GameObject original = GameObject.Find("SatPanel");
+
+        //if its a satellite:
+        if (selectedObject.tag == "Satellite")
+        {
+            Debug.Log("Satellite selected");
+            //Show/Create the SatPanel thing
+            GameObject radSlide = original.transform.Find("Image/RadiusSlider").gameObject;
+            GameObject speedSlide = original.transform.Find("Image/SpeedSlider").gameObject;
+
+
+            ChangeSelectedObject tmp = radSlide.GetComponent<ChangeSelectedObject>();
+
+            radSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
+            speedSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
+
+            SetGUISlider(radSlide, selectedObject.GetComponent<Orbit>().radius);
+            SetGUISlider(speedSlide, selectedObject.GetComponent<Orbit>().rotationSpeed);
+
+        }
+        
+    }
+
+    void SetGUISlider(GameObject sliderObj, float value)
+    {
+        UnityEngine.UI.Slider slider = sliderObj.GetComponent<UnityEngine.UI.Slider>();
+        slider.value = value;
+    }
 }
