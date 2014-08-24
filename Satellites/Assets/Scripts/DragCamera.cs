@@ -12,6 +12,8 @@ public class DragCamera : MonoBehaviour
     public float minZoom = 2;
     public bool scaleDragWithZoom = true;
 	bool lockCameraToSelection = false;
+	Vector3 lockedOffset = new Vector3();
+	public int scrollSensitivity = 100;
 
 	public PlayUISound uiSound;
 
@@ -32,6 +34,7 @@ public class DragCamera : MonoBehaviour
 		//Selection
 		if (Input.GetMouseButtonDown (0)) {
 
+			lockedOffset = new Vector3(0, 0, 0);
 
 			//Select object
 			RaycastHit2D selection = Physics2D.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
@@ -52,6 +55,9 @@ public class DragCamera : MonoBehaviour
 		//Drag camera
 		else if (Input.GetMouseButton(0) && !lockCameraToSelection)
         {
+
+			lockedOffset = new Vector3(0, 0, 0);
+
             Vector3 distanceToMove = (lastMousePos - Input.mousePosition);
             if(scaleDragWithZoom)
                 distanceToMove.Scale(new Vector3(dragSensitivity * zoom, dragSensitivity * zoom, dragSensitivity * zoom));
@@ -62,15 +68,27 @@ public class DragCamera : MonoBehaviour
 			camera.transform.position = camera.transform.position + distanceToMove;
             lastMousePos = Input.mousePosition;
         }
-		//Zoom
-		else if (Input.GetMouseButtonDown(1))
+		//Offset
+		else if(Input.GetMouseButtonDown(1))
+		{			
+			lastMousePos = Input.mousePosition;
+		}
+		else if (Input.GetMouseButton(1))
         {
-            lastMousePos = Input.mousePosition;
-        } else if (Input.GetMouseButton(1))
-        {
-            zoom += (lastMousePos - Input.mousePosition).y * zoomSensitivity;
-            lastMousePos = Input.mousePosition;
+			if(scaleDragWithZoom)
+			{
+				Vector3 tempPos = (lastMousePos - Input.mousePosition);
+				tempPos.Scale(new Vector3(dragSensitivity * zoom, dragSensitivity * zoom, dragSensitivity * zoom));
+				lockedOffset += tempPos;
+			}
+			else
+				lockedOffset += (lastMousePos - Input.mousePosition);
+
+			lastMousePos = Input.mousePosition;
         }
+
+		//Zoom
+		zoom -= Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity;
 
 		//Set min/max zoom
         if (zoom < minZoom)
@@ -84,7 +102,8 @@ public class DragCamera : MonoBehaviour
 
 		
 		if(lockCameraToSelection)
-			camera.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y, -zoom / 10);
+			camera.transform.position = new Vector3(selectedObject.transform.position.x + lockedOffset.x, selectedObject.transform.position.y + lockedOffset.y, camera.transform.position.z);
+
 		camera.orthographicSize = zoom;
 	}
 
