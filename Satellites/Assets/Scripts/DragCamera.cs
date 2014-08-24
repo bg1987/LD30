@@ -53,12 +53,13 @@ public class DragCamera : MonoBehaviour
 				    selectedObject = selection.collider.gameObject;
 				    lockCameraToSelection = true;
 				    uiSound.PlayRandomSwitchClip();
-                
+                    GlobalObjects.Instance.SelectedObject = selection.collider.gameObject;
                     SetSelectedImage();
                 
 			    }
 			    else
 			    {
+                    ClearSelectedImage();
 				    selectedObject = null;
 				    lockCameraToSelection = false;
 				    lastMousePos = Input.mousePosition;
@@ -121,21 +122,50 @@ public class DragCamera : MonoBehaviour
 	}
 
     //TODO: unselect when clicked outside
-    
+
+    void ClearSelectedImage() 
+    {
+        SetSatPanel(null,"",null);
+    }
+
     void SetSelectedImage()
+    {
+
+        SetSatPanel(selectedObject.GetComponent<SpriteRenderer>().sprite, selectedObject.name, selectedObject.GetComponent<Orbit>());
+
+        if (launchButton != null)
+        {
+            Debug.Log(launchButton.transform.position);
+        }
+        //if its not a satellite:
+        if (!(selectedObject.tag == "Satellite"))
+        {
+            //Disable sliders
+
+        }
+        else
+        {
+            
+        }
+        
+    }
+
+    void SetSatPanel(Sprite sprite, string name, Orbit orbit) 
     {
         GameObject img = GameObject.Find("SelectionImage");
         UnityEngine.UI.Image com = img.GetComponent<UnityEngine.UI.Image>();
-        com.sprite = selectedObject.GetComponent<SpriteRenderer>().sprite;
-        /*
-        GameObject b = GameObject.Find("SatPanel");
-        GameObject canvas = GameObject.Find("Canvas");
-        
-        GameObject panel = Instantiate(original, new Vector3(300, 100), Quaternion.identity) as GameObject;
-        panel.transform.parent = canvas.transform;
-        Debug.Log(b.transform.position);
 
-         */
+        if (sprite)
+        {
+            com.sprite = sprite;
+        }
+        else
+        {
+            Debug.Log("Def Sprite");
+            com.sprite = GlobalObjects.Instance.DefaultSelectionSprite;
+        }
+        
+        
         GameObject original = GameObject.Find("SatPanel");
 
 
@@ -145,49 +175,25 @@ public class DragCamera : MonoBehaviour
         GameObject speedSlide = original.transform.Find("Sliders Panel/SpeedSlider").gameObject;
         UnityEngine.UI.Text NameText = original.transform.Find("Name Plate/NameText").gameObject.GetComponent<UnityEngine.UI.Text>();
 
-        NameText.text = selectedObject.name;
+        NameText.text = name;
 
+        radSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = orbit;
+        speedSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = orbit;
 
-
-        GameObject tmp = original.transform.Find("Name Plate/NameText").gameObject;
-        UnityEngine.UI.Text tmp2 = tmp.GetComponent<UnityEngine.UI.Text>();
-        tmp2.text = selectedObject.name;
-
-        radSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
-        speedSlide.GetComponent<ChangeSelectedObject>().selectedObjectOrbit = selectedObject.GetComponent<Orbit>();
-
-        SetGUISlider(radSlide, selectedObject.GetComponent<Orbit>().radius);
-        SetGUISlider(speedSlide, selectedObject.GetComponent<Orbit>().rotationSpeed);
-
-        
-        if (launchButton != null)
+        if (orbit)
         {
-            Debug.Log(launchButton.transform.position);
-        }
-        //if its not a satellite:
-        if (!(selectedObject.tag == "Satellite"))
-        {
-            //Disable sliders
-            //add a launch satellite button.
-            if (launchButton == null)
-            {
-
-                //launchButton = Instantiate(Resources.Load("SatLaunch")) as GameObject;
-                //launchButton.transform.parent = original.transform;
-                //launchButton.transform.position = new Vector3(270,22);
-            }
+            SetGUISlider(radSlide, orbit.radius);
+            SetGUISlider(speedSlide, orbit.rotationSpeed);
 
         }
         else
         {
-            if (launchButton != null)
-            {
-                Destroy(launchButton);    
-            }
-            
+            SetGUISlider(speedSlide,0);
+            SetGUISlider(radSlide,0);
         }
-        
     }
+
+
 
     void SetGUISlider(GameObject sliderObj, float value)
     {
