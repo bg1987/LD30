@@ -15,10 +15,13 @@ public class LaunchSatellite : MonoBehaviour {
         {
             return;
         }
+        Debug.Log(selected.tag);
         //TODO: Name Sats.
         GameObject newSat = Instantiate(prefab,selected.transform.position,Quaternion.identity) as GameObject;
-        
-        
+
+        SatConnection satCon = newSat.GetComponent<SatConnection>();
+        newSat.name = "Sat_" + satCon.myID;
+
         Orbit orbit = newSat.GetComponent<Orbit>();
         orbit.radius = 5.0f;
         orbit.radiusSpeed = 30.0f;
