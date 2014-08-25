@@ -233,8 +233,6 @@ public class DragCamera : MonoBehaviour
             com.sprite = GlobalObjects.Instance.DefaultSelectionSprite;
 			com2.sprite = GlobalObjects.Instance.DefaultSelectionSprite;
         }
-
-		com2.transform.Rotate (new Vector3 (0, Time.deltaTime * 100, 0));
         
         
         GameObject original = GameObject.Find("SatPanel");
@@ -255,25 +253,31 @@ public class DragCamera : MonoBehaviour
         if (orbit)
         {
 
+			GameObject orbitObj = GlobalObjects.Instance.SelectedObject;
+
             //logic for planets vs satellites
-			if (GlobalObjects.Instance.SelectedObject.tag == "Planet" || GlobalObjects.Instance.SelectedObject.tag == "StartingPlanet")
+			if (orbitObj.tag == "Planet" || orbitObj.tag == "StartingPlanet")
             {
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Launch Satellite";
+				Debug.Log(orbitObj.transform);
+				Debug.Log(orbitObj.transform.parent);
+				float max = orbitObj.transform.parent != null ? 5 * orbitObj.transform.parent.GetComponent<Orbit>().baseRadius : 500;
+				float min = orbitObj.transform.parent != null ? orbitObj.transform.parent.GetComponent<Orbit>().minRadius : 0;
 				setGuiSldierEdgeValues(radSlide, 
-				                       GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().minRadius, 
-				                       5 * GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().baseRadius,
+				                       min, 
+				                       max,
 				                       false);
                 setGuiSldierEdgeValues(speedSlide, 1, 50, false);
                 SetAdditionalInfo(orbit);
             }
-			else if (GlobalObjects.Instance.SelectedObject.tag == "Satellite")
+			else if (orbitObj.tag == "Satellite")
             {
                 
                 satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Destroy Satellite";
 
 				setGuiSldierEdgeValues(radSlide, 
-				                       GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().minRadius, 
-				                       2.5f * GlobalObjects.Instance.SelectedObject.transform.parent.GetComponent<Orbit>().baseRadius,
+				                       orbitObj.transform.parent.GetComponent<Orbit>().minRadius, 
+				                       2.5f * orbitObj.transform.parent.GetComponent<Orbit>().baseRadius,
 				                       true);
                 setGuiSldierEdgeValues(speedSlide, 5, 200, true);
                 ClearAdditionalInfo();
