@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
 public class DragCamera : MonoBehaviour
@@ -53,7 +53,7 @@ public class DragCamera : MonoBehaviour
 			    if(selection != null && selection.collider != null && selection.collider.gameObject != null)
 			    {
 				    lockCameraToSelection = true;
-				    uiSound.PlayRandomSwitchClip();
+				    uiSound.PlayRandomRolloverClip();
                     GlobalObjects.Instance.SelectedObject = selection.collider.gameObject;
                     SetSelectedImage();
                 
@@ -144,6 +144,8 @@ public class DragCamera : MonoBehaviour
 
 
 		if (Input.GetKeyDown (KeyCode.Tab)) {
+
+			uiSound.PlayRandomRolloverClip();
 
 			Transform parentTrans;
 
