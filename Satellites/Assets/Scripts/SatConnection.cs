@@ -69,12 +69,12 @@ public class SatConnection : MonoBehaviour {
                 //Debug.DrawLine(transform.position, sat.transform.position, Color.green);
 				if(currentLinerenderer >= lines.Count)
 				{
-					LineRenderer exampleLine = ((LineRenderer)GameObject.FindGameObjectWithTag("Satellite").GetComponent("LineRenderer"));
 					LineRenderer newLine = new GameObject().AddComponent("LineRenderer") as LineRenderer;
 					newLine.sortingLayerName = "Orbit";
 					newLine.name = "LineConnector";
 					newLine.SetWidth(0.2f, 0.2f);
-					newLine.material = exampleLine.material;					
+					//newLine.material = exampleLine.material;		
+                    newLine.material = GetComponent<SpriteRenderer>().material;
 					Color colors = Color.green;
 					newLine.SetColors(colors, colors);
 					newLine.SetVertexCount(2);
@@ -176,7 +176,7 @@ public class SatConnection : MonoBehaviour {
         {
             tmp += id + " ";
         }
-        //Debug.Log(string.Format("Sat{0}, has talked to the following sats: {1}", myID, tmp));
+        Debug.Log(string.Format("{0}, has talked to the following sats: {1}", gameObject.name, tmp));
     }
 }
 

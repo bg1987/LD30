@@ -68,7 +68,10 @@ public class GameRules : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
+        if (rule == RuleType.endlessPercentage ) {
+			StartRules();
+		}
 	}
 	
 	// Update is called once per frame
@@ -162,7 +165,7 @@ public class GameRules : MonoBehaviour {
 
 			}
 
-		if (Input.GetKeyDown (KeyCode.Space) || rule == RuleType.endlessPercentage ) {
+		if (Input.GetKeyDown (KeyCode.Space)  ) {
 			StartRules();
 		}
 

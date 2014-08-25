@@ -15,6 +15,8 @@ public class Orbit : MonoBehaviour
 	public float additionalRadiusCost = 1;
 	public float minRadius = 3;
 
+    public bool logLapTime = false;
+    private float lapStartTime = 0;
     void Start()
     {
         //transform.position = (transform.position - center.position).normalized * radius + center.position;
@@ -27,5 +29,23 @@ public class Orbit : MonoBehaviour
 			desiredPosition = (transform.position - center.position).normalized * radius + center.position;
 			transform.position = Vector3.MoveTowards (transform.position, desiredPosition, Time.deltaTime * radiusSpeed);
 		}
+
+        if (Mathf.RoundToInt(transform.position.y) == 0)
+        {
+            if (lapStartTime == 0)
+            {
+                lapStartTime = Time.time;
+            }
+            else
+            {
+                if (logLapTime)
+                {
+                Debug.Log(string.Format("{0} took {1} seconds to complete half a lap", gameObject.name, Time.time - lapStartTime));        
+                }
+                lapStartTime = 0;
+
+                
+            }
+        }
     }
 }

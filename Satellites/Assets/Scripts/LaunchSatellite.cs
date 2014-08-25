@@ -11,7 +11,7 @@ public class LaunchSatellite : MonoBehaviour {
 
 		GameObject selected = GlobalObjects.Instance.SelectedObject;
 
-        if (!selected || selected.tag != "Planet")//cant launch sats around null or around other sats.
+        if (!selected || selected.tag == "SpaceJunk" || selected.tag == "StartingSatellite")//cant launch sats around null or around other sats.
         {
             return;
         }
