@@ -31,10 +31,6 @@ public class DragCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
-
-        
 		float zoom = camera.orthographicSize;
 
 		//Do nothing here if the mouse is clicked over a UI element.
