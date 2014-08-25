@@ -1,19 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SatConnection.cs">
-    <Files>
-      <File FileName="Assets\Scripts\DragCamera.cs" Line="327" Column="1" />
-      <File FileName="Assets\Scripts\DragCamera.cs" Line="237" Column="62" />
-      <File FileName="Assets\Scripts\LaunchSatellite.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Orbit.cs" Line="1" Column="1" />
-      <File FileName="Assets\GlobalObjects.cs" Line="7" Column="2" />
-      <File FileName="Assets\Scripts\SatConnection.cs" Line="14" Column="9" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="D:\GameDev\LD30\Satellites\Assets\Test.cs" line="9" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
