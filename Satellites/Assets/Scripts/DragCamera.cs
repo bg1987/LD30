@@ -31,6 +31,11 @@ public class DragCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.R))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
 		float zoom = camera.orthographicSize;
 
 		//Do nothing here if the mouse is clicked over a UI element.
@@ -172,9 +177,7 @@ public class DragCamera : MonoBehaviour
 				GlobalObjects.Instance.SelectedObject = GameObject.Find("Sun");
 			}
 
-			UnityEditor.Selection.activeGameObject = GlobalObjects.Instance.SelectedObject;
-
-
+           
 			lockCameraToSelection = true;
 			lockedOffset = new Vector3();
 

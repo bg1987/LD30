@@ -14,6 +14,10 @@ public class Background : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        if (!camera)
+        {
+            camera = GameObject.Find("Main Camera");
+        }
 		background.transform.position = new Vector3(camera.transform.position.x * scale, camera.transform.position.y * scale, background.transform.position.z);
 	}
 }
