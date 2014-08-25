@@ -36,8 +36,7 @@ public class LaunchSatellite : MonoBehaviour {
         newSat.transform.parent = selected.transform;
 
 		newSat.transform.position = GameObject.FindGameObjectWithTag("StartingPlanet").transform.position + new Vector3 (0, 1, 0);
-       
-        
 
+        newSat.transform.localScale = Vector3.one*0.5f;
     }
 }
