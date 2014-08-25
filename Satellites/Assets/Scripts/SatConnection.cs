@@ -69,7 +69,7 @@ public class SatConnection : MonoBehaviour {
                 //Debug.DrawLine(transform.position, sat.transform.position, Color.green);
 				if(currentLinerenderer >= lines.Count)
 				{
-					LineRenderer exampleLine = ((LineRenderer)transform.parent.GetComponent("LineRenderer"));
+					LineRenderer exampleLine = ((LineRenderer)GameObject.FindGameObjectWithTag("Satellite").GetComponent("LineRenderer"));
 					LineRenderer newLine = new GameObject().AddComponent("LineRenderer") as LineRenderer;
 					newLine.sortingLayerName = "Orbit";
 					newLine.name = "LineConnector";

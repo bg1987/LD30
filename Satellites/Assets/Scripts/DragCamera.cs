@@ -144,28 +144,44 @@ public class DragCamera : MonoBehaviour
 
 		if (Input.GetKeyDown (KeyCode.Tab)) {
 
-			Transform parentTrans = GlobalObjects.Instance.SelectedObject.transform.parent;
+			Transform parentTrans;
 
-			int thisPosInParentList = 0;
-			for(int i = 0; i < parentTrans.childCount; i++)
+			if(GlobalObjects.Instance.SelectedObject && GlobalObjects.Instance.SelectedObject.transform.parent)
 			{
-				if(parentTrans.GetChild(i) == GlobalObjects.Instance.SelectedObject.transform)
+				parentTrans = GlobalObjects.Instance.SelectedObject.transform.parent;
+
+				
+				int thisPosInParentList = 0;
+				for(int i = 0; i < parentTrans.childCount; i++)
 				{
-					thisPosInParentList = i;
-					break;
+					if(parentTrans.GetChild(i) == GlobalObjects.Instance.SelectedObject.transform)
+					{
+						thisPosInParentList = i;
+						break;
+					}
 				}
+				
+				thisPosInParentList += 1;
+				
+				if(thisPosInParentList >= parentTrans.childCount)
+				{
+					thisPosInParentList = 0;
+				}
+
+				GlobalObjects.Instance.SelectedObject = parentTrans.GetChild(thisPosInParentList).gameObject;
+
 			}
-
-			thisPosInParentList += 1;
-
-			if(thisPosInParentList >= parentTrans.childCount)
+			else
 			{
-				thisPosInParentList = 0;
+				GlobalObjects.Instance.SelectedObject = GameObject.Find("Sun");
 			}
+
+			UnityEditor.Selection.activeGameObject = GlobalObjects.Instance.SelectedObject;
+
 
 			lockCameraToSelection = true;
 			lockedOffset = new Vector3();
-			GlobalObjects.Instance.SelectedObject = parentTrans.GetChild(thisPosInParentList).gameObject;
+
 			SetSelectedImage();
 
 		}
