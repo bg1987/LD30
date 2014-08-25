@@ -187,6 +187,8 @@ public class DragCamera : MonoBehaviour
 		            GlobalObjects.Instance.SelectedObject.name, 
 		            GlobalObjects.Instance.SelectedObject.GetComponent<Orbit>());
 
+
+
         if (launchButton != null)
         {
             Debug.Log(launchButton.transform.position);
@@ -204,20 +206,35 @@ public class DragCamera : MonoBehaviour
         
     }
 
-    void SetSatPanel(Sprite sprite, string name, Orbit orbit) 
+	void SetSatPanel(Sprite sprite, string name, Orbit orbit) 
     {
         GameObject img = GameObject.Find("SelectionImage");
         UnityEngine.UI.Image com = img.GetComponent<UnityEngine.UI.Image>();
 
+		GameObject img2 = GameObject.Find("SelectionImageOrbiting");
+		UnityEngine.UI.Image com2 = img2.GetComponent<UnityEngine.UI.Image>();
+
         if (sprite)
         {
             com.sprite = sprite;
+
+
+			if(orbit.transform.parent != null)
+			{
+				com2.sprite = orbit.transform.parent.GetComponent<SpriteRenderer>().sprite;
+			}
+			else
+			{
+				com2.sprite = GlobalObjects.Instance.DefaultSelectionSprite;
+			}
         }
         else
         {
-            Debug.Log("Def Sprite");
             com.sprite = GlobalObjects.Instance.DefaultSelectionSprite;
+			com2.sprite = GlobalObjects.Instance.DefaultSelectionSprite;
         }
+
+		com2.transform.Rotate (new Vector3 (0, Time.deltaTime * 100, 0));
         
         
         GameObject original = GameObject.Find("SatPanel");

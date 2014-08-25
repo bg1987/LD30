@@ -10,8 +10,8 @@ public class SatConnection : MonoBehaviour {
     public float radius = 10;
     public int myID;
     public HashSet<int> connectedSats;
-	public static List<LineRenderer> lines = new List<LineRenderer>(1);
-	public static int currentLinerenderer = 0;
+	public List<LineRenderer> lines = new List<LineRenderer>(1);
+	public int currentLinerenderer = 0;
 
     void Awake()
     {
@@ -107,8 +107,12 @@ public class SatConnection : MonoBehaviour {
 		while (true) 
 		{
 			yield return new WaitForEndOfFrame ();
+			if(lines == null || lines.Count == 0)
+			{
+				lines = new List<LineRenderer>();
+			}
 			foreach(LineRenderer rend in lines) {
-					rend.enabled = false;
+				rend.enabled = false;
 			}
 			currentLinerenderer = 0;
 		}
