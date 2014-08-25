@@ -17,4 +17,16 @@ public class MainMenuFunctions : MonoBehaviour {
     {
         Application.LoadLevel(id);
     }
+
+    public void Restart()
+    {
+        GlobalObjects.Instance.speedSlider.value = 1;
+        LoadScene(Application.loadedLevel);
+    }
+
+    public void NextLevel()
+    {
+        GlobalObjects.Instance.speedSlider.value = 1;
+        LoadScene(Application.loadedLevel + 1);
+    }
 }

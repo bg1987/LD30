@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class GameRules : MonoBehaviour {
+    
+
 
 	public SatConnection sat1;
 	public SatConnection sat2;
@@ -23,7 +25,8 @@ public class GameRules : MonoBehaviour {
 	public enum RuleType
 	{
 		percentageOverTime,
-		continuousTime
+		continuousTime,
+        endlessPercentage
 	}
 
 	public RuleType rule = RuleType.continuousTime;
@@ -34,6 +37,33 @@ public class GameRules : MonoBehaviour {
 
     public UnityEngine.UI.Text fuelLabel;
     public UnityEngine.UI.Text uplinkLabel;
+    public GameObject VictoryScreen;
+
+
+
+    //used for endlessPercentage mode
+    //frameTime is the time to draw the frame
+    //linked is whether the main sats are linked.
+    /*
+     *Every frame is inserted into the stack and its weight (frameTime) is added, and a weighted avg of the stack is calculated
+     * frameTime*linked(1/0)
+     * when the sum of frameTime in the stack is over the timeRequired and the avg is above percentageRequired hasWon is set to true.
+     * when a new frame enters and the sum of frames in stack is greater than timeRequired, the stack is poped and the avg is recalculated with the new frame.
+     */
+    private struct UplinkFrame
+    {
+        public float frameTime;
+        public bool linked;
+        public UplinkFrame(bool link)
+        {
+            frameTime = Time.deltaTime;
+            linked = link;
+        }
+    }
+    private Queue<UplinkFrame> frameQueue = new Queue<UplinkFrame>();
+    public float frameTimeSum = 0;
+    public float frameTimeWeightedSum = 0;
+    public bool connected = false;
 
 
 	// Use this for initialization
@@ -45,7 +75,7 @@ public class GameRules : MonoBehaviour {
 	void Update () {
 
 
-		GameObject[] sats = GameObject.FindGameObjectsWithTag ("Satellite");
+		GameObject[] sats = GameObject.FindGameObjectsWithTag ("Satellite"); //main sats are now free. is that good?
 		
 		currentFuel = 0;
 		
@@ -94,14 +124,45 @@ public class GameRules : MonoBehaviour {
 					{
 						hasWon = true;
 						Debug.Log("winner");
+                        VictoryScreen.SetActive(true);
+                        GlobalObjects.Instance.speedSlider.value = 0;
 					}
 				}
 
                 uplinkLabel.text = "Uplink:\n" + currPercentage.ToString("F2") + "/" + percentageRequired;
 				break;
+
+                case RuleType.endlessPercentage:
+                    UplinkFrame f = new UplinkFrame(sat1.connectedSats.Contains(sat2.myID));
+                    connected = f.linked;
+                    if (frameTimeSum >= timeRequired)
+                    {
+                        
+                        if (currPercentage >= percentageRequired)
+                        {
+                            End();
+                            hasWon = true;
+                            Debug.Log("winner");
+                            VictoryScreen.SetActive(true);
+                            GlobalObjects.Instance.speedSlider.value = 0;
+                        }
+
+                        UplinkFrame popped = frameQueue.Dequeue();
+                        frameTimeSum -= popped.frameTime;
+                        frameTimeWeightedSum -= popped.linked ? popped.frameTime : 0;
+                    }
+                    
+                    frameQueue.Enqueue(f);
+                    frameTimeSum += f.frameTime;
+                    frameTimeWeightedSum += f.linked? f.frameTime : 0;
+                    currPercentage = frameTimeWeightedSum / frameTimeSum;
+
+                    uplinkLabel.text = "Last "+timeRequired+"s Uplink:\n" + currPercentage.ToString("P") + "/" + percentageRequired.ToString("P");
+                    break;
+
 			}
 
-		if (Input.GetKeyDown (KeyCode.Space)) {
+		if (Input.GetKeyDown (KeyCode.Space) || rule == RuleType.endlessPercentage ) {
 			StartRules();
 		}
 
