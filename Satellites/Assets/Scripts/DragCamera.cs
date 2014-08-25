@@ -272,9 +272,9 @@ public class DragCamera : MonoBehaviour
 			GameObject orbitObj = GlobalObjects.Instance.SelectedObject;
 
             //logic for planets vs satellites
-			if (orbitObj.tag == "Planet" || orbitObj.tag == "StartingPlanet")
+			if (orbitObj.tag == "Planet" || orbitObj.tag == "StartingPlanet" || orbitObj.tag == "SpaceJunk")
             {
-                satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Launch Satellite";
+                
 				Debug.Log(orbitObj.transform);
 				Debug.Log(orbitObj.transform.parent);
 				float max = orbitObj.transform.parent != null ? 5 * orbitObj.transform.parent.GetComponent<Orbit>().baseRadius : 500;
@@ -284,7 +284,17 @@ public class DragCamera : MonoBehaviour
 				                       max,
 				                       false);
                 setGuiSldierEdgeValues(speedSlide, 1, 50, false);
-                SetAdditionalInfo(orbit);
+                if (orbitObj.tag == "SpaceJunk")
+                {
+                    satLaunchText.GetComponent<UnityEngine.UI.Text>().text ="";
+                    ClearAdditionalInfo();
+                }
+                else
+                {
+                    satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "Launch Satellite";
+                    SetAdditionalInfo(orbit);
+                }
+
             }
 			else if (orbitObj.tag == "Satellite")
             {
@@ -298,6 +308,18 @@ public class DragCamera : MonoBehaviour
                 setGuiSldierEdgeValues(speedSlide, 5, 200, true);
                 ClearAdditionalInfo();
             }
+            else if (orbitObj.tag == "StartingSatellite") 
+            {
+                satLaunchText.GetComponent<UnityEngine.UI.Text>().text = "";
+                setGuiSldierEdgeValues(radSlide,
+                                       orbitObj.transform.parent.GetComponent<Orbit>().minRadius,
+                                       2.5f * orbitObj.transform.parent.GetComponent<Orbit>().baseRadius,
+                                       false);
+                setGuiSldierEdgeValues(speedSlide, 5, 200, false);
+                ClearAdditionalInfo();
+            }
+
+
             SetGUISlider(radSlide, orbit.radius);
             SetGUISlider(speedSlide, orbit.rotationSpeed);
 
