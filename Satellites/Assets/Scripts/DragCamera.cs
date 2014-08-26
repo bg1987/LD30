@@ -117,7 +117,7 @@ public class DragCamera : MonoBehaviour
 
 
 		
-		if(lockCameraToSelection)
+		if(lockCameraToSelection && GlobalObjects.Instance.SelectedObject != null)
 			camera.transform.position = new Vector3(GlobalObjects.Instance.SelectedObject.transform.position.x + lockedOffset.x, 
 			                                        GlobalObjects.Instance.SelectedObject.transform.position.y + lockedOffset.y, 
 			                                        camera.transform.position.z);
