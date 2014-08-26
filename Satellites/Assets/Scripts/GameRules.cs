@@ -141,7 +141,7 @@ public class GameRules : MonoBehaviour {
                     if (frameTimeSum >= timeRequired)
                     {
                         
-                        if (currPercentage >= percentageRequired)
+                        if (currPercentage >= percentageRequired && currentFuel <= totalAllowedFuel)
                         {
                             End();
                             hasWon = true;
